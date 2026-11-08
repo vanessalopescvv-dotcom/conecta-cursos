@@ -3,17 +3,14 @@ import { createModule, deleteModule, createLesson, deleteLesson } from "./action
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
-
-interface PageProps {
-  searchParams: SearchParams;
-}
-
-export default async function AdminCourseManagePage(props: PageProps) {
-  const searchParams = await props.searchParams;
-  const courseId = typeof searchParams.id === "string" ? searchParams.id : undefined;
-  const erro = typeof searchParams.erro === "string" ? searchParams.erro : undefined;
-
+export default async function AdminCourseManagePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const resolvedSearchParams = await searchParams;
+  const courseId = typeof resolvedSearchParams.id === "string" ? resolvedSearchParams.id : undefined;
+  const erro = typeof resolvedSearchParams.erro === "string" ? resolvedSearchParams.erro : undefined;
   if (!courseId) {
     redirect("/admin/cursos");
   }
